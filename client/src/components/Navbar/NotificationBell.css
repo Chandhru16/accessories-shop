@@ -1,0 +1,149 @@
+.bell-wrapper {
+  position: relative;
+}
+
+.bell-button {
+  position: relative;
+  border: none;
+  background: #f1f5f9;
+  color: #475569;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bell-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  font-size: 11px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bell-dropdown {
+  position: absolute;
+  top: 54px;
+  right: 0;
+  width: 320px;
+  max-height: 420px;
+  overflow-y: auto;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  padding: 16px;
+  z-index: 50;
+}
+
+.bell-dropdown h4 {
+  margin-bottom: 10px;
+  color: #0f172a;
+}
+
+.bell-empty {
+  color: #94a3b8;
+  font-size: 14px;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.bell-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bell-item {
+  border: 1px solid #f1f5f9;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.bell-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.bell-status {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+.bell-status.Placed {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.bell-status.NoStock {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.bell-status.NotAbleToDeliver {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.bell-status.Delivered {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.bell-date {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.bell-products {
+  font-size: 13px;
+  color: #475569;
+}
+
+.bell-tracking {
+  margin-top: 6px;
+  border-top: 1px dashed #e2e8f0;
+  padding-top: 6px;
+}
+
+.bell-tracking p {
+  font-size: 12px;
+  color: #334155;
+  margin: 2px 0;
+}
+
+.bell-item-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bell-delete-btn {
+  border: none;
+  background: #fee2e2;
+  color: #dc2626;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bell-delete-btn:hover {
+  background: #fecaca;
+}

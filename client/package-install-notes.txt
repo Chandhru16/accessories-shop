@@ -1,0 +1,6 @@
+Run this inside the client folder to install the packages this code needs:
+
+npm install react-router-dom axios js-cookie react-icons
+
+(You already have react-icons? if not, this adds it — used for the cart,
+delete, and status icons across the app.)

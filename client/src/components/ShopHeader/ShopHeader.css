@@ -1,0 +1,84 @@
+.shop-header {
+  background: linear-gradient(135deg, #1a0e0e 0%, #2b1414 60%, #1a0e0e 100%);
+  border-bottom: 2px solid var(--color-accent);
+}
+
+.shop-header-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.shop-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.shop-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--color-accent);
+  background: #000;
+}
+
+.shop-name {
+  font-family: var(--font-heading);
+  color: var(--color-accent);
+  font-size: 24px;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.shop-tagline {
+  color: #e8d9c8;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin: 2px 0 0;
+}
+
+.shop-address {
+  color: #b09a86;
+  font-size: 12px;
+  margin: 4px 0 0;
+}
+
+.shop-contact {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.shop-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #e8d9c8;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.shop-contact-item:hover {
+  color: var(--color-accent);
+}
+
+@media (max-width: 700px) {
+  .shop-header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .shop-contact {
+    gap: 10px 16px;
+    font-size: 12px;
+  }
+}

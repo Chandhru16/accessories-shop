@@ -1,0 +1,178 @@
+.checkout-page {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 30px 20px 60px;
+}
+
+.checkout-page h1 {
+  color: var(--color-primary);
+  margin-bottom: 20px;
+}
+
+.checkout-section {
+  background: white;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.checkout-section h3 {
+  margin-bottom: 10px;
+  color: #0f172a;
+}
+
+.checkout-section p {
+  color: #475569;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.checkout-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #475569;
+  padding: 6px 0;
+}
+
+.checkout-row.total {
+  font-weight: 700;
+  color: #0f172a;
+  border-top: 1px solid #e2e8f0;
+  margin-top: 6px;
+  padding-top: 10px;
+}
+
+.checkout-error {
+  color: #dc2626;
+  margin-bottom: 10px;
+}
+
+.place-order-btn {
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 10px;
+  background: #16a34a;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.place-order-btn:disabled {
+  background: #86efac;
+}
+
+/* ---- Saved address selection ---- */
+.address-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.address-card {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+}
+
+.address-card-body {
+  flex: 1;
+}
+
+.delete-address-btn {
+  border: none;
+  background: #fee2e2;
+  color: #dc2626;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.delete-address-btn:hover {
+  background: #fecaca;
+}
+
+.address-card.selected {
+  border-color: var(--color-primary);
+  background: #f0f9ff;
+}
+
+.address-card input[type="radio"] {
+  margin-top: 4px;
+}
+
+.address-name {
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 2px;
+}
+
+.add-address-btn {
+  border: 1px dashed var(--color-primary);
+  background: white;
+  color: var(--color-primary);
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.add-address-btn:hover {
+  background: #f0f9ff;
+}
+
+.address-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.address-form input,
+.address-form textarea {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: none;
+}
+
+.address-form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.cancel-address-btn,
+.save-address-btn {
+  flex: 1;
+  height: 42px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.cancel-address-btn {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.save-address-btn {
+  background: var(--color-primary);
+  color: white;
+}
