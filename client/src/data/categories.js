@@ -1,8 +1,8 @@
 // Single source of truth for the category → subcategory structure.
-// Both the customer navbar filter and the Owner Dashboard's "Add Product"
-// form read from this file, so a product's category/subcategory is always
-// picked from a dropdown — never free-typed — which keeps the data
-// consistent (no typos like "watchs" vs "Watches").
+// Both the customer navbar filter and the Owner Dashboard's Add/Edit
+// Product forms read from this file, so a product's category/subcategory
+// is always picked from a dropdown — never free-typed — which keeps the
+// data consistent (no typos like "watchs" vs "Watches").
 //
 // To add/rename a category or subcategory later, edit this file only —
 // both places update automatically.
@@ -11,6 +11,14 @@ const CATEGORY_TREE = [
   {
     name: "Fragrance",
     subcategories: ["Body Spray", "Perfume", "Attar", "Pocket Perfume", "Room Spray"],
+  },
+  {
+    name: "Food & Snacks",
+    subcategories: ["Almond", "Cashew", "Black Kismis", "Chocolates", "Marshmallow"],
+  },
+  {
+    name: "Toys, Gifts & Decor",
+    subcategories: ["Car Toy", "Helicopter Toy", "Dancing Cactus", "Laughing Buddha"],
   },
   {
     name: "Watches & Clocks",
@@ -43,6 +51,8 @@ const CATEGORY_TREE = [
     subcategories: [
       "Bluetooth Speaker",
       "Wired Headphones",
+      "Earpods",
+      "Wireless Mouse",
       "Torch Light",
       "Headlight",
       "Laser Light",
@@ -64,8 +74,10 @@ const CATEGORY_TREE = [
     ],
   },
   {
-    name: "Household & Hardware",
+    name: "Household & Kitchen Appliances",
     subcategories: [
+      "Kettle",
+      "Flask",
       "Mini Knife (Vegetables & Fruits)",
       "Large Knife (Meat & Chicken)",
       "Lock",

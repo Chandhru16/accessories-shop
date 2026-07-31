@@ -29,6 +29,22 @@ exports.addProduct = async (req, res) => {
   }
 };
 
+// PUT /api/owner/products/:id (owner only)
+exports.updateProduct = async (req, res) => {
+  try {
+    const { name, description, price, category, subcategory, stock, imgUrls } = req.body;
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      { name, description, price, category, subcategory, stock, imgUrls },
+      { new: true, runValidators: true }
+    );
+    if (!product) return res.status(404).json({ message: "Product not found." });
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to update product.", error: err.message });
+  }
+};
+
 // DELETE /api/owner/products/:id (owner only)
 exports.deleteProduct = async (req, res) => {
   try {

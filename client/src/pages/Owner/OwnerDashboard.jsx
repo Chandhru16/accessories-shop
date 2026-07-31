@@ -1,25 +1,27 @@
 import { useEffect, useState } from "react";
-import { FaTrash, FaTimesCircle, FaBan, FaTruck } from "react-icons/fa";
+import { FaTrash, FaTimesCircle, FaBan, FaTruck, FaEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/axiosInstance";
 import { clearOwnerAuth } from "../../utils/cookies";
 import CATEGORY_TREE from "../../data/categories";
 import "./OwnerDashboard.css";
 
+const emptyProductForm = {
+  name: "",
+  description: "",
+  price: "",
+  category: "",
+  subcategory: "",
+  stock: "",
+  imgUrls: ["", "", ""],
+};
+
 const OwnerDashboard = () => {
   const navigate = useNavigate();
   const [tab, setTab] = useState("orders"); // "orders" | "products"
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
-  const [newProduct, setNewProduct] = useState({
-    name: "",
-    description: "",
-    price: "",
-    category: "",
-    subcategory: "",
-    stock: "",
-    imgUrls: ["", "", ""],
-  });
+  const [newProduct, setNewProduct] = useState(emptyProductForm);
 
   // Delivered modal state
   const [deliverModalOrder, setDeliverModalOrder] = useState(null);
@@ -28,6 +30,10 @@ const OwnerDashboard = () => {
     trackingId: "",
     expectedDeliveryDate: "",
   });
+
+  // Edit product modal state
+  const [editProduct, setEditProduct] = useState(null); // the product being edited, or null
+  const [editForm, setEditForm] = useState(emptyProductForm);
 
   const loadOrders = () => {
     api
@@ -107,15 +113,42 @@ const OwnerDashboard = () => {
       stock: Number(newProduct.stock),
       imgUrls: newProduct.imgUrls.filter(Boolean),
     });
-    setNewProduct({
-      name: "",
-      description: "",
-      price: "",
-      category: "",
-      subcategory: "",
-      stock: "",
-      imgUrls: ["", "", ""],
+    setNewProduct(emptyProductForm);
+    loadProducts();
+  };
+
+  const openEditModal = (product) => {
+    setEditProduct(product);
+    setEditForm({
+      name: product.name || "",
+      description: product.description || "",
+      price: String(product.price ?? ""),
+      category: product.category || "",
+      subcategory: product.subcategory || "",
+      stock: String(product.stock ?? ""),
+      imgUrls: [
+        product.imgUrls?.[0] || "",
+        product.imgUrls?.[1] || "",
+        product.imgUrls?.[2] || "",
+      ],
     });
+  };
+
+  const closeEditModal = () => setEditProduct(null);
+
+  const submitEditProduct = async (e) => {
+    e.preventDefault();
+    if (!editForm.category || !editForm.subcategory) {
+      alert("Please choose both a category and a subcategory.");
+      return;
+    }
+    await api.put(`/owner/products/${editProduct._id}`, {
+      ...editForm,
+      price: Number(editForm.price),
+      stock: Number(editForm.stock),
+      imgUrls: editForm.imgUrls.filter(Boolean),
+    });
+    closeEditModal();
     loadProducts();
   };
 
@@ -156,6 +189,7 @@ const OwnerDashboard = () => {
                 <th>Qty</th>
                 <th>Customer Name</th>
                 <th>Address</th>
+                <th>Pincode</th>
                 <th>Contact Number</th>
                 <th>Ordered Date</th>
                 <th>Status</th>
@@ -165,7 +199,7 @@ const OwnerDashboard = () => {
             <tbody>
               {orders.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="empty-cell">
+                  <td colSpan={10} className="empty-cell">
                     No orders yet.
                   </td>
                 </tr>
@@ -178,6 +212,7 @@ const OwnerDashboard = () => {
                     <td>{p.qty}</td>
                     <td>{order.customerId?.userName || "-"}</td>
                     <td>{order.addressDetails}</td>
+                    <td>{order.pincode || "-"}</td>
                     <td>{order.customerId?.mobileNumber || "-"}</td>
                     <td>{new Date(order.createdAt).toLocaleDateString()}</td>
                     <td>
@@ -233,6 +268,7 @@ const OwnerDashboard = () => {
               }
               required
             />
+
             <select
               value={newProduct.category}
               onChange={(e) =>
@@ -267,6 +303,7 @@ const OwnerDashboard = () => {
                 </option>
               ))}
             </select>
+
             <input
               type="number"
               placeholder="Price"
@@ -307,6 +344,9 @@ const OwnerDashboard = () => {
                     {p.category} → {p.subcategory}
                   </p>
                 </div>
+                <button className="edit-icon" onClick={() => openEditModal(p)}>
+                  <FaEdit />
+                </button>
                 <button
                   className="delete-icon"
                   onClick={() => handleDeleteProduct(p._id)}
@@ -327,6 +367,7 @@ const OwnerDashboard = () => {
             <div className="modal-customer-info">
               <p><strong>{deliverModalOrder.customerId?.userName}</strong></p>
               <p>{deliverModalOrder.addressDetails}</p>
+              <p>Pincode: {deliverModalOrder.pincode}</p>
               <p>Contact: {deliverModalOrder.customerId?.mobileNumber}</p>
             </div>
 
@@ -367,6 +408,102 @@ const OwnerDashboard = () => {
                 </button>
                 <button type="submit" className="modal-confirm">
                   Confirm Delivery
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {editProduct && (
+        <div className="modal-overlay" onClick={closeEditModal}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+            <h2>Edit Product</h2>
+
+            <form className="edit-product-form" onSubmit={submitEditProduct}>
+              <input
+                placeholder="Name"
+                value={editForm.name}
+                onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                required
+              />
+              <input
+                placeholder="Description"
+                value={editForm.description}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, description: e.target.value })
+                }
+                required
+              />
+
+              <select
+                value={editForm.category}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, category: e.target.value, subcategory: "" })
+                }
+                required
+              >
+                <option value="">Select Category</option>
+                {CATEGORY_TREE.map((cat) => (
+                  <option key={cat.name} value={cat.name}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={editForm.subcategory}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, subcategory: e.target.value })
+                }
+                disabled={!editForm.category}
+                required
+              >
+                <option value="">
+                  {editForm.category ? "Select Subcategory" : "Select category first"}
+                </option>
+                {(
+                  CATEGORY_TREE.find((c) => c.name === editForm.category)?.subcategories || []
+                ).map((sub) => (
+                  <option key={sub} value={sub}>
+                    {sub}
+                  </option>
+                ))}
+              </select>
+
+              <input
+                type="number"
+                placeholder="Price"
+                value={editForm.price}
+                onChange={(e) => setEditForm({ ...editForm, price: e.target.value })}
+                required
+              />
+              <input
+                type="number"
+                placeholder="Stock"
+                value={editForm.stock}
+                onChange={(e) => setEditForm({ ...editForm, stock: e.target.value })}
+                required
+              />
+              {[0, 1, 2].map((i) => (
+                <input
+                  key={i}
+                  placeholder={`Image URL ${i + 1}`}
+                  value={editForm.imgUrls[i]}
+                  onChange={(e) => {
+                    const imgUrls = [...editForm.imgUrls];
+                    imgUrls[i] = e.target.value;
+                    setEditForm({ ...editForm, imgUrls });
+                  }}
+                />
+              ))}
+
+              <div className="modal-actions">
+                <button type="button" className="modal-cancel" onClick={closeEditModal}>
+                  Cancel
+                </button>
+                <button type="submit" className="modal-confirm">
+                  Save Changes
                 </button>
               </div>
             </form>
