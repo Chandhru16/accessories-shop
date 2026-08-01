@@ -54,19 +54,39 @@
 .product-desc {
   font-size: 13px;
   color: #64748b;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   min-height: 32px;
 }
 
-.product-footer {
+.product-price-row {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
 }
 
 .product-price {
   font-weight: 700;
+  font-size: 16px;
   color: var(--color-primary);
+}
+
+.product-mrp {
+  font-size: 13px;
+  color: #94a3b8;
+  text-decoration: line-through;
+}
+
+.product-discount {
+  font-size: 12px;
+  font-weight: 600;
+  color: #15803d;
+}
+
+.product-footer {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .product-footer button {

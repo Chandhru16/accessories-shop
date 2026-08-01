@@ -13,11 +13,13 @@ exports.getProducts = async (req, res) => {
 // POST /api/owner/products (owner only)
 exports.addProduct = async (req, res) => {
   try {
-    const { name, description, price, category, subcategory, stock, imgUrls } = req.body;
+    const { name, description, price, mrp, category, subcategory, stock, imgUrls } =
+      req.body;
     const product = await Product.create({
       name,
       description,
       price,
+      mrp: mrp || null,
       category,
       subcategory,
       stock,
@@ -32,10 +34,11 @@ exports.addProduct = async (req, res) => {
 // PUT /api/owner/products/:id (owner only)
 exports.updateProduct = async (req, res) => {
   try {
-    const { name, description, price, category, subcategory, stock, imgUrls } = req.body;
+    const { name, description, price, mrp, category, subcategory, stock, imgUrls } =
+      req.body;
     const product = await Product.findByIdAndUpdate(
       req.params.id,
-      { name, description, price, category, subcategory, stock, imgUrls },
+      { name, description, price, mrp: mrp || null, category, subcategory, stock, imgUrls },
       { new: true, runValidators: true }
     );
     if (!product) return res.status(404).json({ message: "Product not found." });

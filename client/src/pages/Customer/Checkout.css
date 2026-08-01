@@ -86,10 +86,15 @@
   flex: 1;
 }
 
+.address-card-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.edit-address-btn,
 .delete-address-btn {
   border: none;
-  background: #fee2e2;
-  color: #dc2626;
   width: 28px;
   height: 28px;
   border-radius: 8px;
@@ -98,6 +103,20 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+}
+
+.edit-address-btn {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.edit-address-btn:hover {
+  background: #f0d9c8;
+}
+
+.delete-address-btn {
+  background: #fee2e2;
+  color: #dc2626;
 }
 
 .delete-address-btn:hover {
@@ -132,7 +151,7 @@
 }
 
 .add-address-btn:hover {
-  background: #f0f9ff;
+  background: var(--color-primary-light);
 }
 
 .address-form {

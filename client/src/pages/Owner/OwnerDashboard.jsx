@@ -10,6 +10,7 @@ const emptyProductForm = {
   name: "",
   description: "",
   price: "",
+  mrp: "",
   category: "",
   subcategory: "",
   stock: "",
@@ -110,6 +111,7 @@ const OwnerDashboard = () => {
     await api.post("/owner/products", {
       ...newProduct,
       price: Number(newProduct.price),
+      mrp: newProduct.mrp ? Number(newProduct.mrp) : null,
       stock: Number(newProduct.stock),
       imgUrls: newProduct.imgUrls.filter(Boolean),
     });
@@ -123,6 +125,7 @@ const OwnerDashboard = () => {
       name: product.name || "",
       description: product.description || "",
       price: String(product.price ?? ""),
+      mrp: product.mrp ? String(product.mrp) : "",
       category: product.category || "",
       subcategory: product.subcategory || "",
       stock: String(product.stock ?? ""),
@@ -145,6 +148,7 @@ const OwnerDashboard = () => {
     await api.put(`/owner/products/${editProduct._id}`, {
       ...editForm,
       price: Number(editForm.price),
+      mrp: editForm.mrp ? Number(editForm.mrp) : null,
       stock: Number(editForm.stock),
       imgUrls: editForm.imgUrls.filter(Boolean),
     });
@@ -313,6 +317,12 @@ const OwnerDashboard = () => {
             />
             <input
               type="number"
+              placeholder="MRP (optional — shown crossed out if higher than Price)"
+              value={newProduct.mrp}
+              onChange={(e) => setNewProduct({ ...newProduct, mrp: e.target.value })}
+            />
+            <input
+              type="number"
               placeholder="Stock"
               value={newProduct.stock}
               onChange={(e) => setNewProduct({ ...newProduct, stock: e.target.value })}
@@ -477,6 +487,12 @@ const OwnerDashboard = () => {
                 value={editForm.price}
                 onChange={(e) => setEditForm({ ...editForm, price: e.target.value })}
                 required
+              />
+              <input
+                type="number"
+                placeholder="MRP (optional — shown crossed out if higher than Price)"
+                value={editForm.mrp}
+                onChange={(e) => setEditForm({ ...editForm, mrp: e.target.value })}
               />
               <input
                 type="number"

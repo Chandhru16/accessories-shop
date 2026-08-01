@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaEdit } from "react-icons/fa";
 import { useCart, DELIVERY_CHARGE } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
-import { getSavedAddresses, saveAddress, deleteAddress } from "../../utils/cookies";
+import {
+  getSavedAddresses,
+  saveAddress,
+  deleteAddress,
+  updateAddressAt,
+} from "../../utils/cookies";
 import { addNotification } from "../../utils/notifications";
 import api from "../../api/axiosInstance";
 import "./Checkout.css";
@@ -18,6 +23,7 @@ const Checkout = () => {
   const [addresses, setAddresses] = useState(getSavedAddresses());
   const [selectedIndex, setSelectedIndex] = useState(0); // most recent = default
   const [showAddForm, setShowAddForm] = useState(addresses.length === 0);
+  const [editingIndex, setEditingIndex] = useState(null); // null = adding new, number = editing that index
   const [form, setForm] = useState(emptyForm);
 
   const [placing, setPlacing] = useState(false);
@@ -41,6 +47,18 @@ const Checkout = () => {
     return "";
   };
 
+  const handleOpenAddForm = () => {
+    setEditingIndex(null);
+    setForm(emptyForm);
+    setShowAddForm(true);
+  };
+
+  const handleEditAddress = (index) => {
+    setEditingIndex(index);
+    setForm(addresses[index]);
+    setShowAddForm(true);
+  };
+
   const handleDeleteAddress = (index) => {
     if (!window.confirm("Delete this address?")) return;
     const updated = deleteAddress(index);
@@ -49,11 +67,11 @@ const Checkout = () => {
       setSelectedIndex(0);
     }
     if (updated.length === 0) {
-      setShowAddForm(true);
+      handleOpenAddForm();
     }
   };
 
-  const handleSaveNewAddress = (e) => {
+  const handleSaveAddress = (e) => {
     e.preventDefault();
     const validationError = validate();
     if (validationError) {
@@ -61,10 +79,18 @@ const Checkout = () => {
       return;
     }
     setError("");
-    const updated = saveAddress(form);
-    setAddresses(updated);
-    setSelectedIndex(0); // the newly added one sits first
+
+    if (editingIndex !== null) {
+      const updated = updateAddressAt(editingIndex, form);
+      setAddresses(updated);
+      setSelectedIndex(editingIndex);
+    } else {
+      const updated = saveAddress(form);
+      setAddresses(updated);
+      setSelectedIndex(0); // the newly added one sits first
+    }
     setShowAddForm(false);
+    setEditingIndex(null);
     setForm(emptyForm);
   };
 
@@ -78,8 +104,6 @@ const Checkout = () => {
     setPlacing(true);
     setError("");
     try {
-      // Logs in (or updates) the customer record tied to this address's
-      // mobile number, and gets a JWT for placing the order.
       const { data: loginData } = await api.post("/auth/login", selectedAddress);
       loginCustomer(loginData.token, loginData.customer);
 
@@ -137,29 +161,41 @@ const Checkout = () => {
                   <p>Pincode: {addr.pincode}</p>
                   <p>Mobile: {addr.mobileNumber}</p>
                 </div>
-                <button
-                  type="button"
-                  className="delete-address-btn"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleDeleteAddress(i);
-                  }}
-                >
-                  <FaTrash size={13} />
-                </button>
+                <div className="address-card-actions">
+                  <button
+                    type="button"
+                    className="edit-address-btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleEditAddress(i);
+                    }}
+                  >
+                    <FaEdit size={13} />
+                  </button>
+                  <button
+                    type="button"
+                    className="delete-address-btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleDeleteAddress(i);
+                    }}
+                  >
+                    <FaTrash size={13} />
+                  </button>
+                </div>
               </label>
             ))}
           </div>
         )}
 
         {!showAddForm && (
-          <button className="add-address-btn" onClick={() => setShowAddForm(true)}>
+          <button className="add-address-btn" onClick={handleOpenAddForm}>
             + Add Another Address
           </button>
         )}
 
         {showAddForm && (
-          <form className="address-form" onSubmit={handleSaveNewAddress}>
+          <form className="address-form" onSubmit={handleSaveAddress}>
             <input
               placeholder="Full Name"
               value={form.userName}
@@ -189,13 +225,16 @@ const Checkout = () => {
                 <button
                   type="button"
                   className="cancel-address-btn"
-                  onClick={() => setShowAddForm(false)}
+                  onClick={() => {
+                    setShowAddForm(false);
+                    setEditingIndex(null);
+                  }}
                 >
                   Cancel
                 </button>
               )}
               <button type="submit" className="save-address-btn">
-                Save Address
+                {editingIndex !== null ? "Update Address" : "Save Address"}
               </button>
             </div>
           </form>

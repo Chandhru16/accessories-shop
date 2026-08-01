@@ -13,7 +13,7 @@ const CATEGORY_TREE = [
     subcategories: ["Body Spray", "Perfume", "Attar", "Pocket Perfume", "Room Spray"],
   },
   {
-    name: "Food & Snacks",
+    name: "Dry Fruits and Chocolates",
     subcategories: ["Almond", "Cashew", "Black Kismis", "Chocolates", "Marshmallow"],
   },
   {
@@ -40,6 +40,7 @@ const CATEGORY_TREE = [
       "Hair Gel",
       "Yardley Powder",
       "Enchanteur Powder",
+      "Medicated Oil (Thailam)",
     ],
   },
   {

@@ -6,6 +6,11 @@ const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
   const [imgIndex, setImgIndex] = useState(0);
 
+  const hasDiscount = product.mrp && product.mrp > product.price;
+  const discountPercent = hasDiscount
+    ? Math.round(((product.mrp - product.price) / product.mrp) * 100)
+    : 0;
+
   return (
     <div className="product-card">
       <div className="product-image-wrap">
@@ -24,8 +29,18 @@ const ProductCard = ({ product }) => {
       <div className="product-info">
         <h3>{product.name}</h3>
         <p className="product-desc">{product.description}</p>
-        <div className="product-footer">
+
+        <div className="product-price-row">
           <span className="product-price">₹{product.price}</span>
+          {hasDiscount && (
+            <>
+              <span className="product-mrp">₹{product.mrp}</span>
+              <span className="product-discount">{discountPercent}% off</span>
+            </>
+          )}
+        </div>
+
+        <div className="product-footer">
           <button onClick={() => addToCart(product)}>Add to Cart</button>
         </div>
       </div>

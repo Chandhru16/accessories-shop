@@ -4,7 +4,8 @@ const productSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     description: { type: String, required: true },
-    price: { type: Number, required: true },
+    price: { type: Number, required: true }, // actual selling price
+    mrp: { type: Number, default: null }, // optional — shown crossed-out if higher than price
     category: { type: String, required: true },
     subcategory: { type: String, required: true },
     stock: { type: Number, default: 0 },

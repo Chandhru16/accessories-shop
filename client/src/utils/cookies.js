@@ -40,16 +40,13 @@ export const getSavedAddresses = () => {
 
 export const saveAddress = (address) => {
   const addresses = getSavedAddresses();
-  // Avoid storing an exact duplicate twice.
   const isDuplicate = addresses.some(
     (a) =>
       a.mobileNumber === address.mobileNumber &&
       a.addressDetails === address.addressDetails &&
       a.pincode === address.pincode
   );
-  const updated = isDuplicate
-    ? addresses
-    : [address, ...addresses]; // newest first
+  const updated = isDuplicate ? addresses : [address, ...addresses]; // newest first
   Cookies.set("saved_addresses", JSON.stringify(updated), { expires: 365 });
   return updated;
 };
@@ -57,6 +54,14 @@ export const saveAddress = (address) => {
 export const deleteAddress = (index) => {
   const addresses = getSavedAddresses();
   const updated = addresses.filter((_, i) => i !== index);
+  Cookies.set("saved_addresses", JSON.stringify(updated), { expires: 365 });
+  return updated;
+};
+
+// Edits an existing saved address in place (keeps its position in the list).
+export const updateAddressAt = (index, newAddress) => {
+  const addresses = getSavedAddresses();
+  const updated = addresses.map((a, i) => (i === index ? newAddress : a));
   Cookies.set("saved_addresses", JSON.stringify(updated), { expires: 365 });
   return updated;
 };
