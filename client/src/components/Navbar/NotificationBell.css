@@ -5,8 +5,8 @@
 .bell-button {
   position: relative;
   border: none;
-  background: #f1f5f9;
-  color: #475569;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -16,14 +16,19 @@
   justify-content: center;
 }
 
+.bell-button:hover {
+  background: #f0d9c8;
+}
+
 .bell-badge {
   position: absolute;
   top: -4px;
   right: -4px;
-  background: #ef4444;
-  color: white;
+  background: var(--color-accent);
+  color: #1a0e0e;
   border-radius: 50%;
   font-size: 11px;
+  font-weight: 700;
   width: 20px;
   height: 20px;
   display: flex;
@@ -48,6 +53,7 @@
 .bell-dropdown h4 {
   margin-bottom: 10px;
   color: #0f172a;
+  font-family: var(--font-heading);
 }
 
 .bell-empty {
@@ -108,23 +114,6 @@
   color: #94a3b8;
 }
 
-.bell-products {
-  font-size: 13px;
-  color: #475569;
-}
-
-.bell-tracking {
-  margin-top: 6px;
-  border-top: 1px dashed #e2e8f0;
-  padding-top: 6px;
-}
-
-.bell-tracking p {
-  font-size: 12px;
-  color: #334155;
-  margin: 2px 0;
-}
-
 .bell-item-right {
   display: flex;
   align-items: center;
@@ -146,4 +135,21 @@
 
 .bell-delete-btn:hover {
   background: #fecaca;
+}
+
+.bell-products {
+  font-size: 13px;
+  color: #475569;
+}
+
+.bell-tracking {
+  margin-top: 6px;
+  border-top: 1px dashed #e2e8f0;
+  padding-top: 6px;
+}
+
+.bell-tracking p {
+  font-size: 12px;
+  color: #334155;
+  margin: 2px 0;
 }

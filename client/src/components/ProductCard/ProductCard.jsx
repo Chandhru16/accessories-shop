@@ -1,15 +1,22 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import "./ProductCard.css";
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
+  const navigate = useNavigate();
   const [imgIndex, setImgIndex] = useState(0);
 
   const hasDiscount = product.mrp && product.mrp > product.price;
   const discountPercent = hasDiscount
     ? Math.round(((product.mrp - product.price) / product.mrp) * 100)
     : 0;
+
+  const handleOrderNow = () => {
+    addToCart(product);
+    navigate("/customer/checkout");
+  };
 
   return (
     <div className="product-card">
@@ -41,7 +48,12 @@ const ProductCard = ({ product }) => {
         </div>
 
         <div className="product-footer">
-          <button onClick={() => addToCart(product)}>Add to Cart</button>
+          <button className="add-to-cart-btn" onClick={() => addToCart(product)}>
+            Add to Cart
+          </button>
+          <button className="order-now-btn" onClick={handleOrderNow}>
+            Order Now
+          </button>
         </div>
       </div>
     </div>

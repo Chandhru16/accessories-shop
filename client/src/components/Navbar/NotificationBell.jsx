@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { FaBell, FaTrash } from "react-icons/fa";
+import { FaShoppingBag, FaTrash } from "react-icons/fa";
 import api from "../../api/axiosInstance";
 import {
   getAllNotifications,
@@ -21,9 +21,6 @@ const NotificationBell = () => {
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef(null);
 
-  // Pulls the latest status for every locally-tracked order from the
-  // backend, so owner updates (No Stock / Delivered / etc.) show up here
-  // even though this list lives in localStorage, not a customer login.
   const refreshStatuses = async () => {
     const current = getAllNotifications();
     if (current.length === 0) {
@@ -74,7 +71,7 @@ const NotificationBell = () => {
           refreshStatuses();
         }}
       >
-        <FaBell size={20} />
+        <FaShoppingBag size={19} />
         {notifications.length > 0 && (
           <span className="bell-badge">{notifications.length}</span>
         )}

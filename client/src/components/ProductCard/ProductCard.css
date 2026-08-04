@@ -9,14 +9,17 @@
 
 .product-image-wrap {
   position: relative;
-  height: 180px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   background: #f8fafc;
+  overflow: hidden;
 }
 
 .product-image-wrap img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 .image-dots {
@@ -86,19 +89,34 @@
 
 .product-footer {
   display: flex;
-  justify-content: flex-end;
+  gap: 8px;
 }
 
 .product-footer button {
+  flex: 1;
   border: none;
-  background: var(--color-primary);
-  color: white;
-  padding: 8px 14px;
+  padding: 9px 10px;
   border-radius: 8px;
   font-size: 13px;
   cursor: pointer;
+  font-weight: 600;
 }
 
-.product-footer button:hover {
-  background: var(--color-primary-dark);
+.add-to-cart-btn {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.add-to-cart-btn:hover {
+  background: #f0d9c8;
+}
+
+.order-now-btn {
+  background: var(--color-accent);
+  color: #1a0e0e;
+}
+
+.order-now-btn:hover {
+  background: var(--color-accent-dark);
+  color: white;
 }
