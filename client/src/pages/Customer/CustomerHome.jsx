@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import ShopHeader from "../../components/ShopHeader/ShopHeader";
 import CustomerNavbar from "../../components/Navbar/CustomerNavbar";
+import PromoCarousel from "../../components/PromoCarousel/PromoCarousel";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import CartDrawer from "../../components/Cart/CartDrawer";
 import Footer from "../../components/Footer/Footer";
@@ -53,6 +54,8 @@ const CustomerHome = () => {
         onSearchChange={setSearchTerm}
         onCartClick={() => setShowCart(true)}
       />
+
+      <PromoCarousel />
 
       <main className="product-grid">
         {filteredProducts.length === 0 ? (

@@ -30,9 +30,8 @@ exports.getMyOrders = async (req, res) => {
 };
 
 // GET /api/orders/status/:id — used to refresh a single locally-stored
-// notification's status. Only returns non-sensitive order-progress fields
-// (no address/customer info), so it doesn't need auth — this lets the bell
-// track orders placed under any saved address/mobile number in one list.
+// notification's status. No auth required (see notifications.js on the
+// client for why this needs to work across saved-address identities).
 exports.getOrderStatusById = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id).select(
@@ -58,9 +57,6 @@ exports.getOrders = async (req, res) => {
 };
 
 // PATCH /api/owner/orders/:id/status (owner only)
-// body: { status, trackingId?, courierCompany?, expectedDeliveryDate? }
-// Updates now show up for the customer via the in-app notification bell —
-// no SMS is sent.
 exports.updateOrderStatus = async (req, res) => {
   try {
     const { status, trackingId, courierCompany, expectedDeliveryDate } = req.body;
@@ -78,5 +74,17 @@ exports.updateOrderStatus = async (req, res) => {
     res.json({ message: "Order status updated.", order });
   } catch (err) {
     res.status(500).json({ message: "Failed to update order.", error: err.message });
+  }
+};
+
+// DELETE /api/owner/orders/:id (owner only) — permanently removes an order
+// record from the database.
+exports.deleteOrder = async (req, res) => {
+  try {
+    const deleted = await Order.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ message: "Order not found." });
+    res.json({ message: "Order deleted." });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to delete order.", error: err.message });
   }
 };

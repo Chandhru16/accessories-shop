@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import "./ProductCard.css";
@@ -6,7 +6,8 @@ import "./ProductCard.css";
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
   const navigate = useNavigate();
-  const [imgIndex, setImgIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const scrollRef = useRef(null);
 
   const hasDiscount = product.mrp && product.mrp > product.price;
   const discountPercent = hasDiscount
@@ -18,19 +19,41 @@ const ProductCard = ({ product }) => {
     navigate("/customer/checkout");
   };
 
+  // Updates the active dot as the user swipes/scrolls the image strip.
+  const handleScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const index = Math.round(el.scrollLeft / el.clientWidth);
+    setActiveIndex(index);
+  };
+
+  // Clicking a dot scrolls smoothly to that image.
+  const scrollToIndex = (index) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollTo({ left: index * el.clientWidth, behavior: "smooth" });
+    setActiveIndex(index);
+  };
+
   return (
     <div className="product-card">
       <div className="product-image-wrap">
-        <img src={product.imgUrls[imgIndex]} alt={product.name} />
-        <div className="image-dots">
-          {product.imgUrls.map((_, i) => (
-            <span
-              key={i}
-              className={`dot ${i === imgIndex ? "active" : ""}`}
-              onClick={() => setImgIndex(i)}
-            />
+        <div className="product-image-scroll" ref={scrollRef} onScroll={handleScroll}>
+          {product.imgUrls.map((url, i) => (
+            <img key={i} src={url} alt={`${product.name} ${i + 1}`} />
           ))}
         </div>
+        {product.imgUrls.length > 1 && (
+          <div className="image-dots">
+            {product.imgUrls.map((_, i) => (
+              <span
+                key={i}
+                className={`dot ${i === activeIndex ? "active" : ""}`}
+                onClick={() => scrollToIndex(i)}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="product-info">

@@ -131,6 +131,17 @@
   color: #15803d;
 }
 
+.action-btn.delete-order {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.promo-form-hint {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: -4px;
+}
+
 .products-section {
   display: grid;
   grid-template-columns: 320px 1fr;
@@ -170,6 +181,11 @@
   padding: 10px;
   border-radius: 8px;
   cursor: pointer;
+}
+
+.add-product-form button:disabled {
+  background: #86efac;
+  cursor: not-allowed;
 }
 
 .product-list {

@@ -7,6 +7,7 @@ const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const ownerRoutes = require("./routes/ownerRoutes");
+const bannerRoutes = require("./routes/bannerRoutes");
 
 const app = express();
 
@@ -21,8 +22,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/owner", ownerRoutes);
+app.use("/api/banners", bannerRoutes);
 
-// Basic error fallback
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: "Something went wrong on the server." });
