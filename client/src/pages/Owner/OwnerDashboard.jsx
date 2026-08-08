@@ -19,10 +19,16 @@ const emptyProductForm = {
 
 const OwnerDashboard = () => {
   const navigate = useNavigate();
-  const [tab, setTab] = useState("orders"); // "orders" | "products"
+  const [tab, setTab] = useState("orders"); // "orders" | "products" | "promotions"
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState(emptyProductForm);
+
+  // Promotions (banner carousel) state
+  const [banners, setBanners] = useState([]);
+  const [newBanner, setNewBanner] = useState({ imageUrl: "", linkUrl: "" });
+  const [editBanner, setEditBanner] = useState(null); // banner being edited, or null
+  const [editBannerForm, setEditBannerForm] = useState({ imageUrl: "", linkUrl: "" });
 
   // Delivered modal state
   const [deliverModalOrder, setDeliverModalOrder] = useState(null);
@@ -50,9 +56,17 @@ const OwnerDashboard = () => {
       .catch(() => {});
   };
 
+  const loadBanners = () => {
+    api
+      .get("/banners")
+      .then(({ data }) => setBanners(data))
+      .catch(() => {});
+  };
+
   useEffect(() => {
     loadOrders();
     loadProducts();
+    loadBanners();
   }, []);
 
   const handleLogout = () => {
@@ -72,6 +86,17 @@ const OwnerDashboard = () => {
     await api.patch(`/owner/orders/${orderId}/status`, {
       status: "NotAbleToDeliver",
     });
+    loadOrders();
+  };
+
+  const handleDeleteOrder = async (orderId) => {
+    if (
+      !window.confirm(
+        "Permanently delete this order from the database? This cannot be undone."
+      )
+    )
+      return;
+    await api.delete(`/owner/orders/${orderId}`);
     loadOrders();
   };
 
@@ -156,6 +181,43 @@ const OwnerDashboard = () => {
     loadProducts();
   };
 
+  // ---- Promotion banner actions ----
+  const handleAddBanner = async (e) => {
+    e.preventDefault();
+    if (banners.length >= 20) {
+      alert("You've reached the maximum of 20 promotion banners.");
+      return;
+    }
+    if (!newBanner.imageUrl) return;
+    try {
+      await api.post("/owner/banners", newBanner);
+      setNewBanner({ imageUrl: "", linkUrl: "" });
+      loadBanners();
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to add banner.");
+    }
+  };
+
+  const openEditBannerModal = (banner) => {
+    setEditBanner(banner);
+    setEditBannerForm({ imageUrl: banner.imageUrl, linkUrl: banner.linkUrl || "" });
+  };
+
+  const closeEditBannerModal = () => setEditBanner(null);
+
+  const submitEditBanner = async (e) => {
+    e.preventDefault();
+    await api.put(`/owner/banners/${editBanner._id}`, editBannerForm);
+    closeEditBannerModal();
+    loadBanners();
+  };
+
+  const handleDeleteBanner = async (bannerId) => {
+    if (!window.confirm("Delete this promotion banner?")) return;
+    await api.delete(`/owner/banners/${bannerId}`);
+    loadBanners();
+  };
+
   return (
     <div className="owner-dashboard">
       <header className="owner-header">
@@ -177,6 +239,12 @@ const OwnerDashboard = () => {
           onClick={() => setTab("products")}
         >
           Products
+        </button>
+        <button
+          className={tab === "promotions" ? "active" : ""}
+          onClick={() => setTab("promotions")}
+        >
+          Promotions
         </button>
       </div>
 
@@ -243,6 +311,12 @@ const OwnerDashboard = () => {
                           onClick={() => openDeliverModal(order)}
                         >
                           <FaTruck /> Delivered
+                        </button>
+                        <button
+                          className="action-btn delete-order"
+                          onClick={() => handleDeleteOrder(order._id)}
+                        >
+                          <FaTrash /> Delete Order
                         </button>
                       </td>
                     ) : null}
@@ -368,6 +442,59 @@ const OwnerDashboard = () => {
           </div>
         </div>
       )}
+
+      {tab === "promotions" && (
+        <div className="products-section">
+          <form className="add-product-form" onSubmit={handleAddBanner}>
+            <h3>Add Promotion Banner</h3>
+            <p className="promo-form-hint">
+              {banners.length}/20 banners used. These appear as a full-width
+              scrolling carousel on the customer home page, right below the
+              category bar.
+            </p>
+            <input
+              placeholder="Banner Image URL"
+              value={newBanner.imageUrl}
+              onChange={(e) => setNewBanner({ ...newBanner, imageUrl: e.target.value })}
+              required
+            />
+            <input
+              placeholder="Link URL (optional — opens when clicked)"
+              value={newBanner.linkUrl}
+              onChange={(e) => setNewBanner({ ...newBanner, linkUrl: e.target.value })}
+            />
+            <button type="submit" disabled={banners.length >= 20}>
+              Add Promotion
+            </button>
+          </form>
+
+          <div className="product-list">
+            {banners.length === 0 && (
+              <p className="empty-cell">No promotion banners added yet.</p>
+            )}
+            {banners.map((banner) => (
+              <div className="product-row" key={banner._id}>
+                <img src={banner.imageUrl} alt="Promotion" />
+                <div className="product-row-info">
+                  <p className="product-row-category">
+                    {banner.linkUrl ? banner.linkUrl : "No link set"}
+                  </p>
+                </div>
+                <button className="edit-icon" onClick={() => openEditBannerModal(banner)}>
+                  <FaEdit />
+                </button>
+                <button
+                  className="delete-icon"
+                  onClick={() => handleDeleteBanner(banner._id)}
+                >
+                  <FaTrash />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
 
       {deliverModalOrder && (
         <div className="modal-overlay" onClick={closeDeliverModal}>
@@ -516,6 +643,42 @@ const OwnerDashboard = () => {
 
               <div className="modal-actions">
                 <button type="button" className="modal-cancel" onClick={closeEditModal}>
+                  Cancel
+                </button>
+                <button type="submit" className="modal-confirm">
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {editBanner && (
+        <div className="modal-overlay" onClick={closeEditBannerModal}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+            <h2>Edit Promotion Banner</h2>
+
+            <form onSubmit={submitEditBanner}>
+              <label>Banner Image URL</label>
+              <input
+                value={editBannerForm.imageUrl}
+                onChange={(e) =>
+                  setEditBannerForm({ ...editBannerForm, imageUrl: e.target.value })
+                }
+                required
+              />
+
+              <label>Link URL (optional)</label>
+              <input
+                value={editBannerForm.linkUrl}
+                onChange={(e) =>
+                  setEditBannerForm({ ...editBannerForm, linkUrl: e.target.value })
+                }
+              />
+
+              <div className="modal-actions">
+                <button type="button" className="modal-cancel" onClick={closeEditBannerModal}>
                   Cancel
                 </button>
                 <button type="submit" className="modal-confirm">
