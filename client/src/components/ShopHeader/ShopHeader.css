@@ -4,7 +4,7 @@
 }
 
 .shop-header-inner {
-  max-width: min(94%, 1680px);
+  max-width: 100%;
   margin: 0 auto;
   padding: 14px 24px;
   display: flex;

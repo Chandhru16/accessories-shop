@@ -209,10 +209,12 @@
   height: 48px;
   border-radius: 8px;
   object-fit: cover;
+  flex-shrink: 0;
 }
 
 .product-row-info {
   flex: 1;
+  min-width: 0;
 }
 
 .product-row-info h4 {
@@ -228,6 +230,9 @@
   font-size: 11px;
   color: #94a3b8;
   margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .edit-icon {

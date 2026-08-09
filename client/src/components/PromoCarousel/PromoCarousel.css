@@ -22,7 +22,8 @@
   scroll-snap-align: start;
   display: block;
   aspect-ratio: 21 / 6;
-  object-fit: cover;
+  object-fit: contain;
+  background: #1a0e0e;
 }
 
 .promo-scroll img.clickable {
