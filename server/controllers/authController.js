@@ -3,19 +3,20 @@ const generateToken = require("../utils/generateToken");
 
 // POST /api/auth/login
 // Creates the customer on first visit, or updates their details on repeat
-// visits (in case they change address/pincode), then logs them in directly —
-// no OTP step.
+// visits (in case they change address/pincode/email), then logs them in
+// directly — no OTP step.
 exports.loginCustomer = async (req, res) => {
   try {
-    const { userName, mobileNumber, addressDetails, pincode } = req.body;
+    const { userName, mobileNumber, email, addressDetails, pincode } = req.body;
 
-    if (!userName || !mobileNumber || !addressDetails || !pincode) {
+    if (!userName || !mobileNumber || !email || !addressDetails || !pincode) {
       return res.status(400).json({ message: "All fields are required." });
     }
 
     let customer = await Customer.findOne({ mobileNumber });
     if (customer) {
       customer.userName = userName;
+      customer.email = email;
       customer.addressDetails = addressDetails;
       customer.pincode = pincode;
       await customer.save();
@@ -23,6 +24,7 @@ exports.loginCustomer = async (req, res) => {
       customer = await Customer.create({
         userName,
         mobileNumber,
+        email,
         addressDetails,
         pincode,
       });
@@ -36,6 +38,7 @@ exports.loginCustomer = async (req, res) => {
         _id: customer._id,
         userName: customer.userName,
         mobileNumber: customer.mobileNumber,
+        email: customer.email,
         addressDetails: customer.addressDetails,
         pincode: customer.pincode,
       },

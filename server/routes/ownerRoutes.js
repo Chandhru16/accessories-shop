@@ -6,6 +6,7 @@ const {
   getOrders,
   updateOrderStatus,
   deleteOrder,
+  verifyPayment,
 } = require("../controllers/orderController");
 const {
   addProduct,
@@ -22,6 +23,7 @@ router.post("/login", loginOwner);
 
 router.get("/orders", requireOwner, getOrders);
 router.patch("/orders/:id/status", requireOwner, updateOrderStatus);
+router.patch("/orders/:id/verify-payment", requireOwner, verifyPayment);
 router.delete("/orders/:id", requireOwner, deleteOrder);
 
 router.post("/products", requireOwner, addProduct);

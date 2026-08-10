@@ -195,3 +195,68 @@
   background: var(--color-primary);
   color: white;
 }
+
+/* ---- Payment method ---- */
+.payment-options {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.payment-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #475569;
+}
+
+.payment-option.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.upi-payment-box {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 18px;
+  text-align: center;
+}
+
+.upi-instructions {
+  font-size: 13px;
+  color: #475569;
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+.upi-qr-wrap {
+  display: flex;
+  justify-content: center;
+  background: white;
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.upi-id-text {
+  font-size: 13px;
+  color: #334155;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.upi-payment-box input {
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
