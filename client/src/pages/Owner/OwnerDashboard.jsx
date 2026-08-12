@@ -89,6 +89,13 @@ const OwnerDashboard = () => {
     loadOrders();
   };
 
+  const handleVerifyPayment = async (orderId) => {
+    if (!window.confirm("Confirm this UPI payment was received before marking it verified?"))
+      return;
+    await api.patch(`/owner/orders/${orderId}/verify-payment`);
+    loadOrders();
+  };
+
   const handleDeleteOrder = async (orderId) => {
     if (
       !window.confirm(
@@ -265,13 +272,14 @@ const OwnerDashboard = () => {
                 <th>Contact Number</th>
                 <th>Ordered Date</th>
                 <th>Status</th>
+                <th>Payment</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {orders.length === 0 && (
                 <tr>
-                  <td colSpan={10} className="empty-cell">
+                  <td colSpan={11} className="empty-cell">
                     No orders yet.
                   </td>
                 </tr>
@@ -292,6 +300,30 @@ const OwnerDashboard = () => {
                         {order.status}
                       </span>
                     </td>
+                    {idx === 0 ? (
+                      <td rowSpan={order.products.length}>
+                        {order.paymentMethod === "UPI" ? (
+                          <div className="payment-cell">
+                            <span className={`payment-badge ${order.paymentStatus}`}>
+                              UPI · {order.paymentStatus}
+                            </span>
+                            <span className="upi-ref-text">
+                              Ref: {order.upiTransactionRef || "-"}
+                            </span>
+                            {order.paymentStatus === "Pending" && (
+                              <button
+                                className="verify-payment-btn"
+                                onClick={() => handleVerifyPayment(order._id)}
+                              >
+                                Verify Payment
+                              </button>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="payment-badge COD">COD</span>
+                        )}
+                      </td>
+                    ) : null}
                     {idx === 0 ? (
                       <td rowSpan={order.products.length} className="actions-cell">
                         <button

@@ -2,6 +2,7 @@
   min-height: 100vh;
   background: #f8fafc;
   padding: 24px;
+  overflow-x: hidden;
 }
 
 .owner-header {
@@ -146,6 +147,15 @@
   display: grid;
   grid-template-columns: 320px 1fr;
   gap: 20px;
+  min-width: 0;
+}
+
+.add-product-form {
+  min-width: 0;
+}
+
+.product-list {
+  min-width: 0;
 }
 
 .add-product-form {
@@ -385,4 +395,54 @@
 .modal-confirm {
   background: #16a34a;
   color: white;
+}
+
+/* ---- Payment column ---- */
+.payment-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.payment-badge {
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.payment-badge.COD {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.payment-badge.Pending {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.payment-badge.Verified {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.upi-ref-text {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.verify-payment-btn {
+  border: none;
+  background: #16a34a;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.verify-payment-btn:hover {
+  background: #15803d;
 }
