@@ -159,6 +159,7 @@ const Checkout = () => {
       addNotification({
         orderId: data.orderId,
         products: items.map(({ product, qty }) => ({ name: product.name, qty })),
+        paymentMethod,
       });
       clearCart();
       navigate("/customer/order-success", { state: { orderId: data.orderId } });

@@ -140,6 +140,26 @@
 .bell-products {
   font-size: 13px;
   color: #475569;
+  margin-bottom: 6px;
+}
+
+.bell-payment-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 20px;
+  margin-bottom: 4px;
+}
+
+.bell-payment-badge.Pending {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.bell-payment-badge.Verified {
+  background: #dcfce7;
+  color: #15803d;
 }
 
 .bell-tracking {

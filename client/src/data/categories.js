@@ -41,6 +41,8 @@ const CATEGORY_TREE = [
       "Yardley Powder",
       "Enchanteur Powder",
       "Medicated Oil (Thailam)",
+      "Sanitizer",
+      "Shower Gel",
     ],
   },
   {

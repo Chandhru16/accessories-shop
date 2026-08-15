@@ -16,6 +16,11 @@ const STATUS_LABEL = {
   Delivered: "Shipped",
 };
 
+const PAYMENT_LABEL = {
+  Pending: "Payment pending verification",
+  Verified: "Payment verified",
+};
+
 const NotificationBell = () => {
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = useState(false);
@@ -103,9 +108,17 @@ const NotificationBell = () => {
                       </button>
                     </div>
                   </div>
+
                   <p className="bell-products">
                     {n.products.map((p) => `${p.name} × ${p.qty}`).join(", ")}
                   </p>
+
+                  {n.paymentMethod === "UPI" && (
+                    <span className={`bell-payment-badge ${n.paymentStatus}`}>
+                      {PAYMENT_LABEL[n.paymentStatus] || n.paymentStatus}
+                    </span>
+                  )}
+
                   {n.status === "Delivered" && (
                     <div className="bell-tracking">
                       <p>Courier: {n.courierCompany}</p>

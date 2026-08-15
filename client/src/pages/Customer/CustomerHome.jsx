@@ -9,23 +9,39 @@ import api from "../../api/axiosInstance";
 import mockProducts from "../../data/products";
 import "./CustomerHome.css";
 
+// Fisher-Yates shuffle — so products don't always appear in the same
+// fixed "owner entered them in this order" sequence every time someone
+// visits. Re-shuffled fresh each time the product list is (re)loaded.
+const shuffleArray = (arr) => {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+};
+
 const CustomerHome = () => {
-  const [products, setProducts] = useState(mockProducts);
+  const [products, setProducts] = useState(() => shuffleArray(mockProducts));
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
   const [activeCategory, setActiveCategory] = useState(null); // null = "All"
   const [activeSubcategory, setActiveSubcategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [showCart, setShowCart] = useState(false);
 
   useEffect(() => {
-    // Once the backend is running, this replaces the mock data.
     api
       .get("/products")
       .then(({ data }) => {
-        if (Array.isArray(data) && data.length > 0) setProducts(data);
+        if (Array.isArray(data) && data.length > 0) {
+          setProducts(shuffleArray(data));
+        }
       })
       .catch(() => {
-        // Backend not connected yet — keep showing mock products.
-      });
+        // Backend not reachable — keep showing the (already shuffled) mock
+        // products rather than an empty page.
+      })
+      .finally(() => setIsLoadingProducts(false));
   }, []);
 
   const handleCategoryChange = (categoryName, subcategoryName) => {
@@ -56,6 +72,13 @@ const CustomerHome = () => {
       />
 
       <PromoCarousel />
+
+      {isLoadingProducts && (
+        <div className="products-loading-bar">
+          <span className="products-loading-spinner" />
+          Loading latest products...
+        </div>
+      )}
 
       <main className="product-grid">
         {filteredProducts.length === 0 ? (
