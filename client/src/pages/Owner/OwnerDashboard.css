@@ -446,3 +446,44 @@
 .verify-payment-btn:hover {
   background: #15803d;
 }
+
+/* ---- Product search (Products tab) ---- */
+.product-list-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+}
+
+.product-list-search-icon {
+  color: #16a34a;
+  flex-shrink: 0;
+}
+
+.product-list-search input {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  font-family: inherit;
+  color: #14532d;
+}
+
+.product-list-search input::placeholder {
+  color: #86a893;
+}
+
+@media (max-width: 500px) {
+  .product-list-search {
+    padding: 9px 12px;
+  }
+
+  .product-list-search input {
+    font-size: 13px;
+  }
+}

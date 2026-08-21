@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaTrash, FaTimesCircle, FaBan, FaTruck, FaEdit } from "react-icons/fa";
+import { FaTrash, FaTimesCircle, FaBan, FaTruck, FaEdit, FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/axiosInstance";
 import { clearOwnerAuth } from "../../utils/cookies";
@@ -22,6 +22,7 @@ const OwnerDashboard = () => {
   const [tab, setTab] = useState("orders"); // "orders" | "products" | "promotions"
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
+  const [productSearchTerm, setProductSearchTerm] = useState("");
   const [newProduct, setNewProduct] = useState(emptyProductForm);
 
   // Promotions (banner carousel) state
@@ -449,8 +450,28 @@ const OwnerDashboard = () => {
             <button type="submit">Add Product</button>
           </form>
 
+          <div className="product-list-search">
+            <FaSearch className="product-list-search-icon" />
+            <input
+              type="text"
+              placeholder="Search products by name, category, or subcategory..."
+              value={productSearchTerm}
+              onChange={(e) => setProductSearchTerm(e.target.value)}
+            />
+          </div>
+
           <div className="product-list">
-            {products.map((p) => (
+            {products
+              .filter((p) => {
+                const term = productSearchTerm.trim().toLowerCase();
+                if (!term) return true;
+                return (
+                  p.name?.toLowerCase().includes(term) ||
+                  p.category?.toLowerCase().includes(term) ||
+                  p.subcategory?.toLowerCase().includes(term)
+                );
+              })
+              .map((p) => (
               <div className="product-row" key={p._id}>
                 <img src={p.imgUrls?.[0]} alt={p.name} />
                 <div className="product-row-info">

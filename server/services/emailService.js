@@ -73,3 +73,56 @@ via the notification bag icon on our website.
     return false;
   }
 };
+
+// Alerts the owner the instant a new order comes in — a free substitute
+// for SMS, reusing the same Gmail setup. Sent to OWNER_EMAIL if set,
+// otherwise falls back to EMAIL_USER (the shop's own inbox) so this works
+// with zero extra configuration.
+exports.sendOwnerNewOrderAlert = async (order) => {
+  const ownerEmail = process.env.OWNER_EMAIL || process.env.EMAIL_USER;
+  if (!ownerEmail) return true; // nothing configured — skip silently
+
+  const productLines = order.products
+    .map((p) => `  - ${p.name} × ${p.qty} — ₹${p.price * p.qty}`)
+    .join("\n");
+
+  const paymentLine =
+    order.paymentMethod === "UPI"
+      ? `UPI (Ref: ${order.upiTransactionRef || "—"}) — needs verification`
+      : "Cash on Delivery";
+
+  const body = `New order received on Golden Plaza!
+
+Order ID: ${order._id}
+Customer: ${order.customerName || "—"} (${order.customerMobile || "—"})
+Email: ${order.email}
+
+${productLines}
+
+Total: ₹${order.totalAmount}
+Payment: ${paymentLine}
+
+Deliver to:
+${order.addressDetails}
+Pincode: ${order.pincode}
+
+Open the Owner Dashboard to manage this order.`;
+
+  if (!hasEmailConfig) {
+    console.log(`[MOCK OWNER ALERT to ${ownerEmail}]:\n${body}`);
+    return true;
+  }
+
+  try {
+    await transporter.sendMail({
+      from: `"Golden Plaza Orders" <${process.env.EMAIL_USER}>`,
+      to: ownerEmail,
+      subject: `🛍️ New Order #${order._id} — ₹${order.totalAmount}`,
+      text: body,
+    });
+    return true;
+  } catch (err) {
+    console.error("Failed to send owner order alert:", err.message);
+    return false;
+  }
+};

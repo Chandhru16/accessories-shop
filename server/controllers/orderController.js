@@ -1,6 +1,6 @@
 const Order = require("../models/Order");
 const Customer = require("../models/Customer");
-const { sendOrderConfirmationEmail } = require("../services/emailService");
+const { sendOrderConfirmationEmail, sendOwnerNewOrderAlert } = require("../services/emailService");
 
 // POST /api/orders (customer only)
 exports.createOrder = async (req, res) => {
@@ -36,10 +36,13 @@ exports.createOrder = async (req, res) => {
     // Fire the confirmation email — don't block/fail order placement if
     // sending fails (customer still gets their order either way).
     const customer = await Customer.findById(req.user.id);
-    sendOrderConfirmationEmail({
+    const orderData = {
       ...order.toObject(),
       customerName: customer?.userName,
-    }).catch(() => {});
+      customerMobile: customer?.mobileNumber,
+    };
+    sendOrderConfirmationEmail(orderData).catch(() => {});
+    sendOwnerNewOrderAlert(orderData).catch(() => {});
 
     res.status(201).json({ message: "Order placed.", orderId: order._id });
   } catch (err) {
