@@ -450,48 +450,50 @@ const OwnerDashboard = () => {
             <button type="submit">Add Product</button>
           </form>
 
-          <div className="product-list-search">
-            <FaSearch className="product-list-search-icon" />
-            <input
-              type="text"
-              placeholder="Search products by name, category, or subcategory..."
-              value={productSearchTerm}
-              onChange={(e) => setProductSearchTerm(e.target.value)}
-            />
-          </div>
+          <div className="product-list-column">
+            <div className="product-list-search">
+              <FaSearch className="product-list-search-icon" />
+              <input
+                type="text"
+                placeholder="Search products by name, category, or subcategory..."
+                value={productSearchTerm}
+                onChange={(e) => setProductSearchTerm(e.target.value)}
+              />
+            </div>
 
-          <div className="product-list">
-            {products
-              .filter((p) => {
-                const term = productSearchTerm.trim().toLowerCase();
-                if (!term) return true;
-                return (
-                  p.name?.toLowerCase().includes(term) ||
-                  p.category?.toLowerCase().includes(term) ||
-                  p.subcategory?.toLowerCase().includes(term)
-                );
-              })
-              .map((p) => (
-              <div className="product-row" key={p._id}>
-                <img src={p.imgUrls?.[0]} alt={p.name} />
-                <div className="product-row-info">
-                  <h4>{p.name}</h4>
-                  <p>₹{p.price} · Stock: {p.stock}</p>
-                  <p className="product-row-category">
-                    {p.category} → {p.subcategory}
-                  </p>
+            <div className="product-list">
+              {products
+                .filter((p) => {
+                  const term = productSearchTerm.trim().toLowerCase();
+                  if (!term) return true;
+                  return (
+                    p.name?.toLowerCase().includes(term) ||
+                    p.category?.toLowerCase().includes(term) ||
+                    p.subcategory?.toLowerCase().includes(term)
+                  );
+                })
+                .map((p) => (
+                <div className="product-row" key={p._id}>
+                  <img src={p.imgUrls?.[0]} alt={p.name} />
+                  <div className="product-row-info">
+                    <h4>{p.name}</h4>
+                    <p>₹{p.price} · Stock: {p.stock}</p>
+                    <p className="product-row-category">
+                      {p.category} → {p.subcategory}
+                    </p>
+                  </div>
+                  <button className="edit-icon" onClick={() => openEditModal(p)}>
+                    <FaEdit />
+                  </button>
+                  <button
+                    className="delete-icon"
+                    onClick={() => handleDeleteProduct(p._id)}
+                  >
+                    <FaTrash />
+                  </button>
                 </div>
-                <button className="edit-icon" onClick={() => openEditModal(p)}>
-                  <FaEdit />
-                </button>
-                <button
-                  className="delete-icon"
-                  onClick={() => handleDeleteProduct(p._id)}
-                >
-                  <FaTrash />
-                </button>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       )}

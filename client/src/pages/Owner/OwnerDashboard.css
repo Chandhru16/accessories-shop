@@ -448,6 +448,11 @@
 }
 
 /* ---- Product search (Products tab) ---- */
+.product-list-column {
+  min-width: 0;
+  align-self: start;
+}
+
 .product-list-search {
   display: flex;
   align-items: center;
