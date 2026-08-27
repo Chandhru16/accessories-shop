@@ -5,8 +5,8 @@ import PromoCarousel from "../../components/PromoCarousel/PromoCarousel";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import CartDrawer from "../../components/Cart/CartDrawer";
 import Footer from "../../components/Footer/Footer";
+import PerfumeLoader from "../../components/PerfumeLoader/PerfumeLoader";
 import api from "../../api/axiosInstance";
-import mockProducts from "../../data/products";
 import "./CustomerHome.css";
 
 // Fisher-Yates shuffle — so products don't always appear in the same
@@ -22,7 +22,10 @@ const shuffleArray = (arr) => {
 };
 
 const CustomerHome = () => {
-  const [products, setProducts] = useState(() => shuffleArray(mockProducts));
+  // No mock/demo products anymore — starts empty and only ever shows real
+  // products fetched from the server. The perfume-spray loader covers the
+  // gap while that fetch is in flight.
+  const [products, setProducts] = useState([]);
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
   const [activeCategory, setActiveCategory] = useState(null); // null = "All"
   const [activeSubcategory, setActiveSubcategory] = useState(null);
@@ -33,13 +36,13 @@ const CustomerHome = () => {
     api
       .get("/products")
       .then(({ data }) => {
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           setProducts(shuffleArray(data));
         }
       })
       .catch(() => {
-        // Backend not reachable — keep showing the (already shuffled) mock
-        // products rather than an empty page.
+        // Backend not reachable — products stays empty; the "no products"
+        // message below covers this case instead of showing fake data.
       })
       .finally(() => setIsLoadingProducts(false));
   }, []);
@@ -73,22 +76,19 @@ const CustomerHome = () => {
 
       <PromoCarousel />
 
-      {isLoadingProducts && (
-        <div className="products-loading-bar">
-          <span className="products-loading-spinner" />
-          Loading latest products...
-        </div>
+      {isLoadingProducts ? (
+        <PerfumeLoader />
+      ) : (
+        <main className="product-grid">
+          {filteredProducts.length === 0 ? (
+            <p className="no-products">No products found.</p>
+          ) : (
+            filteredProducts.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))
+          )}
+        </main>
       )}
-
-      <main className="product-grid">
-        {filteredProducts.length === 0 ? (
-          <p className="no-products">No products found.</p>
-        ) : (
-          filteredProducts.map((product) => (
-            <ProductCard key={product._id} product={product} />
-          ))
-        )}
-      </main>
 
       {showCart && <CartDrawer onClose={() => setShowCart(false)} />}
       <Footer />

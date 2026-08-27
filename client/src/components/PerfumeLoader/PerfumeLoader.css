@@ -1,0 +1,94 @@
+.perfume-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  min-height: 320px;
+}
+
+.perfume-loader-svg {
+  width: 180px;
+  height: 220px;
+}
+
+.bottle-body {
+  fill: #fbeae0;
+  stroke: var(--color-primary);
+  stroke-width: 3;
+}
+
+.liquid {
+  fill: var(--color-accent);
+  opacity: 0.85;
+}
+
+.label {
+  fill: white;
+  stroke: var(--color-primary);
+  stroke-width: 1.5;
+}
+
+.neck {
+  fill: var(--color-primary);
+}
+
+.cap {
+  fill: var(--color-primary);
+  stroke: var(--color-primary-dark);
+  stroke-width: 2;
+}
+
+.nozzle,
+.nozzle-tip {
+  fill: var(--color-accent-dark);
+}
+
+.trigger {
+  stroke: var(--color-primary-dark);
+}
+
+.puff {
+  fill: var(--color-accent);
+  opacity: 0;
+  transform-origin: center;
+  animation: puff-drift 1.6s ease-out infinite;
+}
+
+.puff-1 {
+  animation-delay: 0s;
+}
+.puff-2 {
+  animation-delay: 0.25s;
+}
+.puff-3 {
+  animation-delay: 0.5s;
+}
+.puff-4 {
+  animation-delay: 0.75s;
+}
+.puff-5 {
+  animation-delay: 1s;
+}
+
+@keyframes puff-drift {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.6);
+  }
+  25% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(14px, -34px) scale(1.4);
+  }
+}
+
+.perfume-loader-text {
+  margin-top: 14px;
+  font-size: 15px;
+  color: var(--color-primary);
+  font-weight: 600;
+  font-family: var(--font-body);
+}
