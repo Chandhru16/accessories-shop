@@ -461,7 +461,7 @@ const OwnerDashboard = () => {
               />
             </div>
 
-            <div className="product-list">
+            <div className="product-list product-list-scroll">
               {products
                 .filter((p) => {
                   const term = productSearchTerm.trim().toLowerCase();
@@ -473,26 +473,26 @@ const OwnerDashboard = () => {
                   );
                 })
                 .map((p) => (
-                <div className="product-row" key={p._id}>
-                  <img src={p.imgUrls?.[0]} alt={p.name} />
-                  <div className="product-row-info">
-                    <h4>{p.name}</h4>
-                    <p>₹{p.price} · Stock: {p.stock}</p>
-                    <p className="product-row-category">
-                      {p.category} → {p.subcategory}
-                    </p>
+                  <div className="product-row" key={p._id}>
+                    <img src={p.imgUrls?.[0]} alt={p.name} />
+                    <div className="product-row-info">
+                      <h4>{p.name}</h4>
+                      <p>₹{p.price} · Stock: {p.stock}</p>
+                      <p className="product-row-category">
+                        {p.category} → {p.subcategory}
+                      </p>
+                    </div>
+                    <button className="edit-icon" onClick={() => openEditModal(p)}>
+                      <FaEdit />
+                    </button>
+                    <button
+                      className="delete-icon"
+                      onClick={() => handleDeleteProduct(p._id)}
+                    >
+                      <FaTrash />
+                    </button>
                   </div>
-                  <button className="edit-icon" onClick={() => openEditModal(p)}>
-                    <FaEdit />
-                  </button>
-                  <button
-                    className="delete-icon"
-                    onClick={() => handleDeleteProduct(p._id)}
-                  >
-                    <FaTrash />
-                  </button>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
         </div>

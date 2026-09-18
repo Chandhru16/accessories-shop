@@ -447,10 +447,15 @@
   background: #15803d;
 }
 
-/* ---- Product search (Products tab) ---- */
+/* ---- Product search + independently scrolling product list ---- */
+/* The form and search bar stay put; only the product list scrolls, so the
+   owner isn't scrolling the whole page past a tall form to reach products. */
 .product-list-column {
   min-width: 0;
   align-self: start;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 220px);
 }
 
 .product-list-search {
@@ -462,6 +467,7 @@
   border-radius: 10px;
   padding: 10px 14px;
   margin-bottom: 14px;
+  flex-shrink: 0;
 }
 
 .product-list-search-icon {
@@ -481,6 +487,50 @@
 
 .product-list-search input::placeholder {
   color: #86a893;
+}
+
+/* Only this scrolls */
+.product-list-scroll {
+  overflow-y: auto;
+  padding-right: 6px;
+  flex: 1;
+  min-height: 0;
+}
+
+.product-list-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.product-list-scroll::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 8px;
+}
+
+.product-list-scroll::-webkit-scrollbar-thumb {
+  background: #bbf7d0;
+  border-radius: 8px;
+}
+
+.product-list-scroll::-webkit-scrollbar-thumb:hover {
+  background: #86efac;
+}
+
+/* Keep the Add Product form visible while the list scrolls beside it */
+@media (min-width: 801px) {
+  .add-product-form {
+    position: sticky;
+    top: 20px;
+    max-height: calc(100vh - 220px);
+    overflow-y: auto;
+  }
+}
+
+/* On mobile the two stack, so give the list its own comfortable height
+   rather than tying it to the viewport minus a desktop-sized header. */
+@media (max-width: 800px) {
+  .product-list-column {
+    max-height: 70vh;
+  }
 }
 
 @media (max-width: 500px) {
